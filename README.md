@@ -40,11 +40,11 @@ You can download the script directly to your VPS using wget or curl.
 Using wget:
 bash
 Copy code
-wget https://your-repository-url/vps-install-script.sh -O install.sh
+wget https://github.com/Kartvya69/Nebula-Scripts.git
 Using curl:
 bash
 Copy code
-curl -o install.sh https://your-repository-url/vps-install-script.sh
+curl -o https://github.com/Kartvya69/Nebula-Scripts.git
 Step 3: Make the Script Executable
 After downloading the script, you need to make it executable.
 
