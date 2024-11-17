@@ -55,17 +55,17 @@ Installation Instructions
 
 1. Download the script:
 
-wget https://your-repository-url.com/server-management-script.sh
+wget https://github.com/Kartvya69/Nebula-Scripts.git
 
 
 2. Make the script executable:
 
-chmod +x server-management-script.sh
+chmod +x Nebulascript.sh
 
 
 3. Run the script:
 
-sudo ./server-management-script.sh
+sudo ./nebulascript.sh or bash nebulascript.sh
 
 
 
