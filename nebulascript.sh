@@ -3,183 +3,160 @@
 # Clear the console
 clear
 
-# Log function for better tracking
+# Color codes for better visuals
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+# Log functions
 log() {
-    echo "[INFO] $(date +'%Y-%m-%d %H:%M:%S') - $1"
+    echo -e "${GREEN}[INFO] $(date +'%Y-%m-%d %H:%M:%S') - $1${NC}"
 }
 
-# Function to install Node.js using nvm
+warn() {
+    echo -e "${YELLOW}[WARN] $(date +'%Y-%m-%d %H:%M:%S') - $1${NC}"
+}
+
+error() {
+    echo -e "${RED}[ERROR] $(date +'%Y-%m-%d %H:%M:%S') - $1${NC}"
+}
+
+# Function: Install Dependencies
+install_dependencies() {
+    log "Installing required dependencies..."
+    sudo apt update && sudo apt upgrade -y
+    sudo apt install -y curl wget git software-properties-common tar gzip unzip lsb-release
+}
+
+# Section 1: Install Node.js
 install_nodejs() {
     log "Installing Node.js with nvm..."
-    
-    if ! command -v curl &> /dev/null; then
-        log "curl not found. Installing curl..."
-        sudo apt update && sudo apt install -y curl
-    fi
-    
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
     export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion  # Ensure nvm is available
-    
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     nvm install 22
     node -v
     npm -v
     log "Node.js installation completed."
 }
 
-# Function to install McsManager
+# Section 2: Install McsManager
 install_mcsmanager() {
     log "Installing McsManager..."
-    
-    if ! command -v wget &> /dev/null; then
-        log "wget not found. Installing wget..."
-        sudo apt update && sudo apt install -y wget
-    fi
-    
     wget -qO- https://script.mcsmanager.com/setup.sh | bash
     log "McsManager installation completed."
 }
 
-# Function to manually install MCSManager
+# Section 3: Manual Install McsManager
 manual_install_mcsmanager() {
     log "Starting manual installation of MCSManager..."
-    
-    # Create /opt directory and switch to it
-    mkdir -p /opt
-    cd /opt/
-    
-    # Download and set up Node.js 20.11
-    log "Downloading Node.js 20.11..."
-    wget https://nodejs.org/dist/v20.11.0/node-v20.11.0-linux-x64.tar.xz
-    tar -xvf node-v20.11.0-linux-x64.tar.xz
-    sudo ln -s /opt/node-v20.11.0-linux-x64/bin/node /usr/bin/node
-    sudo ln -s /opt/node-v20.11.0-linux-x64/bin/npm /usr/bin/npm
-    
-    # Prepare MCSManager directory and download the release
-    mkdir -p /opt/mcsmanager/
-    cd /opt/mcsmanager/
-    log "Downloading MCSManager..."
+    mkdir -p /opt/mcsmanager
+    cd /opt/mcsmanager
     wget https://github.com/MCSManager/MCSManager/releases/latest/download/mcsmanager_linux_release.tar.gz
     tar -zxf mcsmanager_linux_release.tar.gz
-    
-    # Install dependencies and provide instructions for starting MCSManager
     ./install.sh
-    log "MCSManager installed. Use the following commands to start:"
-    log "1) Open a terminal and run: ./start-daemon.sh"
-    log "2) Open another terminal and run: ./start-web.sh"
-    log "Access the web interface at: http://localhost:23333/"
+    log "MCSManager manual installation completed."
 }
 
-# Function to install PufferPanel with Docker
+# Section 4: Install PufferPanel with Docker
 install_pufferpanel_docker() {
     log "Installing PufferPanel with Docker..."
-    
-    if ! command -v docker &> /dev/null; then
-        log "Docker not found. Installing Docker..."
-        curl -fsSL https://get.docker.com -o get-docker.sh
-        sudo sh get-docker.sh
-        rm get-docker.sh
-    fi
-    
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sudo sh get-docker.sh
     mkdir -p /var/lib/pufferpanel
     docker volume create pufferpanel-config
-    
-    # Create and start PufferPanel container
     docker create --name pufferpanel -p 8080:8080 -p 5657:5657 \
         -v pufferpanel-config:/etc/pufferpanel \
         -v /var/lib/pufferpanel:/var/lib/pufferpanel \
         -v /var/run/docker.sock:/var/run/docker.sock \
         --restart=on-failure pufferpanel/pufferpanel:latest
-    
     docker start pufferpanel
-    docker exec -it pufferpanel /pufferpanel/pufferpanel user add
-    log "PufferPanel installation with Docker completed. Access it at http://localhost:8080"
+    log "PufferPanel with Docker installed."
 }
 
-# Additional functions omitted for brevity...
-
-# Function to install Ctrl Panel (Generic Control Panel Installation)
+# Section 5: Install Ctrl Panel
 install_ctrl_panel() {
     log "Installing Ctrl Panel..."
-    
-    # Example: Generic control panel installation (adjust as needed for your specific control panel)
-    
-    # Update and install required packages (assuming apt-based distros)
     sudo apt update && sudo apt install -y apache2 mysql-server php php-fpm
-    
-    # Clone the control panel repository (example GitHub repo)
     git clone https://github.com/your-ctrl-panel-repo.git /opt/ctrlpanel
-    
-    # Configure the panel (adjust the installation steps as needed for your panel)
     cd /opt/ctrlpanel
-    sudo ./install.sh
-    
-    log "Ctrl Panel installation completed. Access the panel at http://localhost"
+    ./install.sh
+    log "Ctrl Panel installation completed."
+}
+
+# Section 6: Install Jexactyl
+install_jexactyl() {
+    log "Installing Jexactyl..."
+    mkdir -p /var/www/jexactyl
+    cd /var/www/jexactyl
+    curl -Lo panel.tar.gz https://github.com/jexactyl/jexactyl/releases/latest/download/panel.tar.gz
+    tar -xzvf panel.tar.gz
+    chmod -R 755 storage/* bootstrap/cache/
+    composer install --no-dev --optimize-autoloader
+    cp .env.example .env
+    php artisan key:generate
+    log "Jexactyl installed. Please configure the panel in /var/www/jexactyl."
+}
+
+# Section 7: Install Pterodactyl Panel (Unofficial Script)
+install_pterodactyl_panel_unofficial() {
+    log "Installing Pterodactyl Panel with Unofficial Script..."
+    bash <(curl -s https://raw.githubusercontent.com/vilhelmprytz/pterodactyl-installer/master/install-panel.sh)
+    log "Pterodactyl Panel installed successfully."
+}
+
+# Section 8: Install Pterodactyl Node (Unofficial Script)
+install_pterodactyl_node_unofficial() {
+    log "Installing Pterodactyl Node (Wings) with Unofficial Script..."
+    bash <(curl -s https://raw.githubusercontent.com/vilhelmprytz/pterodactyl-installer/master/install-wings.sh)
+    log "Pterodactyl Node (Wings) installed successfully."
+}
+
+# Section 9: Install Pterodactyl Panel (No IPv4, Unofficial Script)
+install_pterodactyl_panel_no_ipv4_unofficial() {
+    log "Installing Pterodactyl Panel without IPv4 using Unofficial Script..."
+    bash <(curl -s https://raw.githubusercontent.com/vilhelmprytz/pterodactyl-installer/master/install-panel.sh) \
+        --disable-ipv4
+    log "Pterodactyl Panel without IPv4 installed."
+}
+
+# Section 10: Install Pterodactyl Node (No IPv4, Unofficial Script)
+install_pterodactyl_node_no_ipv4_unofficial() {
+    log "Installing Pterodactyl Node without IPv4 using Unofficial Script..."
+    bash <(curl -s https://raw.githubusercontent.com/vilhelmprytz/pterodactyl-installer/master/install-wings.sh) \
+        --disable-ipv4
+    log "Pterodactyl Node without IPv4 installed."
 }
 
 # Menu options
-echo "Please select an option:"
-echo "1) Install Node.js"
-echo "2) Install McsManager"
-echo "3) Install PufferPanel (Docker)"
-echo "4) Install PufferPanel (without Docker)"
-echo "5) Install Pterodactyl Panel"
-echo "6) Install Pterodactyl Node"
-echo "7) Cancel"
-echo "8) Install Pterodactyl Panel without IPv4"
-echo "9) Install Pterodactyl Node without IPv4"
-echo "10) Install Jexactyl"
-echo "11) Manual Installation of MCSManager"
-echo "12) Install Ctrl Panel"
-echo "13) Cancel & Abort Script"
+while true; do
+    echo -e "\n${YELLOW}Please select an option:${NC}"
+    echo "1) Install Node.js"
+    echo "2) Install McsManager"
+    echo "3) Manual Install McsManager"
+    echo "4) Install PufferPanel with Docker"
+    echo "5) Install Ctrl Panel"
+    echo "6) Install Jexactyl"
+    echo "7) Install Pterodactyl Panel (Unofficial Script)"
+    echo "8) Install Pterodactyl Node (Unofficial Script)"
+    echo "9) Install Pterodactyl Panel (No IPv4, Unofficial Script)"
+    echo "10) Install Pterodactyl Node (No IPv4, Unofficial Script)"
+    echo "11) Exit"
+    read -p "Enter your choice [1-11]: " choice
 
-# Read user choice
-read -p "Enter your choice [1-13]: " choice
-
-# Handle user choice
-case $choice in
-    1)
-        install_nodejs
-        ;;
-    2)
-        install_mcsmanager
-        ;;
-    3)
-        install_pufferpanel_docker
-        ;;
-    4)
-        install_pufferpanel_no_docker
-        ;;
-    5)
-        install_pterodactyl_panel
-        ;;
-    6)
-        install_pterodactyl_node
-        ;;
-    7)
-        log "Operation cancelled."
-        ;;
-    8)
-        install_pterodactyl_panel_no_ipv4
-        ;;
-    9)
-        install_pterodactyl_node_no_ipv4
-        ;;
-    10)
-        install_jexactyl
-        ;;
-    11)
-        manual_install_mcsmanager
-        ;;
-    12)
-        install_ctrl_panel
-        ;;
-    13)
-        log "Script aborted."
-        exit 0
-        ;;
-    *)
-        log "Invalid choice, please try again."
-        ;;
-esac
+    case $choice in
+    1) install_nodejs ;;
+    2) install_mcsmanager ;;
+    3) manual_install_mcsmanager ;;
+    4) install_pufferpanel_docker ;;
+    5) install_ctrl_panel ;;
+    6) install_jexactyl ;;
+    7) install_pterodactyl_panel_unofficial ;;
+    8) install_pterodactyl_node_unofficial ;;
+    9) install_pterodactyl_panel_no_ipv4_unofficial ;;
+    10) install_pterodactyl_node_no_ipv4_unofficial ;;
+    11) log "Exiting script. Goodbye!"; exit 0 ;;
+    *) error "Invalid choice. Please try again." ;;
+    esac
+done
