@@ -28,8 +28,8 @@ The script will check for and install these dependencies:
 
 1. Clone this repository:
    ```bash
-   git clone <repository_url>
-   cd <repository_name>
+   git clone https://github.com/Kartvya69/Nebula-Scripts.git
+   cd Nebula-Scripts
 
 2. Make the script executable:
 
