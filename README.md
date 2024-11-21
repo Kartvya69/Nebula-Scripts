@@ -1,178 +1,138 @@
-# Server Management Script
 
-This script automates the installation of various server management panels and tools. It supports installations of Node.js, MCSManager, PufferPanel, Pterodactyl Panel & Node, Jexactyl, and a Ctrl Panel, with both Docker and manual installation options.
+# Automated Server Panel Installer
 
-Table of Contents
+This script simplifies the installation of popular server management panels like **McsManager**, **PufferPanel**, **Ctrl Panel**, **Pterodactyl**, and more. It supports both Docker and non-Docker setups with dynamic environment checks and robust error handling.
 
-1. Features
+---
 
+## Features
+- Install Node.js using NVM.
+- Automatic and manual installations for McsManager.
+- Install PufferPanel with and without Docker.
+- Simplified setup for Ctrl Panel, Jexactyl, and Pterodactyl (both official and unofficial methods).
+- Error handling, user prompts, and progress feedback.
 
-2. Requirements
+---
 
+## Prerequisites
+Ensure your system has:
+- **Debian/Ubuntu-based OS** (e.g., Ubuntu 20.04+ or Debian 10+).
+- Root or sudo access.
 
-3. Installation Instructions
+The script will check for and install these dependencies:
+- `curl`, `wget`, `git`, `tar`, `unzip`, and `npm`.
 
+---
 
-4. Usage
+## Installation
 
-
-5. Options Explained
-
-
-6. License
-
-
-
-Features
-
-This script provides one-click installation for the following tools:
-
-Node.js (using nvm or a manual installation)
-
-MCSManager (a Minecraft server management panel)
-
-PufferPanel (a game server management panel, with and without Docker support)
-
-Pterodactyl Panel & Node (a powerful game server management panel)
-
-Jexactyl (an open-source game server management tool)
-
-Ctrl Panel (a generic control panel, customizable for any server management system)
-
-Cancel/Abort Script (to stop the script at any point)
-
-
-Requirements
-
-Linux server (Ubuntu or Debian-based recommended)
-
-Root or sudo privileges
-
-curl, wget, git, and other common utilities
-
-
-Installation Instructions
-
-1. Download the script:
-
-wget https://github.com/Kartvya69/Nebula-Scripts.git
-
+1. Clone this repository:
+   ```bash
+   git clone <repository_url>
+   cd <repository_name>
 
 2. Make the script executable:
 
-chmod +x Nebulascript.sh
+chmod +x installer.sh
 
 
 3. Run the script:
 
-sudo ./nebulascript.sh or bash nebulascript.sh
+./installer.sh
 
 
+
+
+---
 
 Usage
 
-Once the script is executed, it will present a menu of installation options. Choose the number corresponding to the tool you want to install by typing the number and pressing Enter.
+The script provides a menu-driven interface:
 
-Example:
+1. Select the desired installation option:
 
-Please select an option:
-1) Install Node.js
-2) Install McsManager
-3) Install PufferPanel (Docker)
-4) Install PufferPanel (without Docker)
-5) Install Pterodactyl Panel
-6) Install Pterodactyl Node
-7) Cancel
-8) Install Pterodactyl Panel without IPv4
-9) Install Pterodactyl Node without IPv4
-10) Install Jexactyl
-11) Manual Installation of MCSManager
-12) Install Ctrl Panel
-13) Cancel & Abort Script
+Node.js: Sets up NVM and installs Node.js 22.
 
-Select an option by entering the number corresponding to your desired action. Follow the on-screen prompts to complete the installation.
+McsManager: Choose between automated or manual installation.
 
-Options Explained
+PufferPanel: Install with or without Docker.
 
-1. Install Node.js
+Ctrl Panel: Includes fixes for common issues.
 
-Installs Node.js (v22) using nvm or manually (for a specific version).
+Jexactyl: Installs the panel with optimizations.
+
+Pterodactyl: Offers both official and unofficial methods.
 
 
 
-2. Install McsManager
-
-Installs MCSManager, a Minecraft server management panel.
+2. Follow the on-screen instructions for each selection.
 
 
 
-3. Install PufferPanel (Docker)
 
-Installs PufferPanel with Docker support for managing game servers.
+---
 
+Panels Covered
 
-
-4. Install PufferPanel (without Docker)
-
-Installs PufferPanel without Docker support.
+1. Node.js: Base dependency setup.
 
 
+2. McsManager:
 
-5. Install Pterodactyl Panel
+Automatic installation with dependencies.
 
-Installs the Pterodactyl Panel, a popular game server management panel.
+Manual installation for custom setups.
 
 
 
-6. Install Pterodactyl Node
+3. PufferPanel:
 
-Installs Pterodactyl Node, a node that works with the Pterodactyl panel.
+With Docker.
 
-
-
-7. Cancel
-
-Aborts the current operation and exits the script.
+Without Docker for non-containerized environments.
 
 
 
-8. Install Pterodactyl Panel without IPv4
-
-Installs the Pterodactyl Panel with an IPv6-only configuration.
+4. Ctrl Panel: Fixes applied for a smooth setup.
 
 
-
-9. Install Pterodactyl Node without IPv4
-
-Installs Pterodactyl Node with an IPv6-only configuration.
+5. Jexactyl: Fully optimized installation process.
 
 
+6. Pterodactyl:
 
-10. Install Jexactyl
+Official panel and node setups.
 
-Installs Jexactyl, an open-source game server management tool.
+Unofficial scripts for simplified installation.
 
 
 
-11. Manual Installation of MCSManager
-
-Manually installs MCSManager, a Minecraft server manager, using pre-defined steps and instructions.
 
 
-
-12. Install Ctrl Panel
-
-Installs a generic control panel (customizable for any server management system).
-
-
-
-13. Cancel & Abort Script
-
-Aborts the script entirely and exits.
-
-
-
+---
 
 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+
+---
+
+Contribution
+
+Feel free to open issues or submit pull requests for improvements. Collaboration is welcome!
+
+
+---
+
+Troubleshooting
+
+If you encounter any errors:
+
+1. Check the terminal logs for details.
+
+
+2. Ensure all dependencies are installed correctly.
+
+
+3. Reach out for support or open an issue in this repository.
