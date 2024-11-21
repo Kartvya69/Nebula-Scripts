@@ -38,7 +38,7 @@ chmod +x installer.sh
 
 3. Run the script:
 
-./installer.sh
+bash nebulascript.sh
 
 
 
