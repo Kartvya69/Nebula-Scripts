@@ -65,52 +65,34 @@ install_nodejs() {
 # Section 2: Install McsManager
 install_mcsmanager() {
     log "Installing McsManager..."
-    cd /tmp || exit
     wget https://github.com/MCSManager/MCSManager/releases/latest/download/mcsmanager_linux_release.tar.gz
     tar -zxf mcsmanager_linux_release.tar.gz
-    sudo mv mcsmanager /opt/mcsmanager
+    cd /mcsmanager
 
     log "Installing dependencies for daemon..."
-    cd /opt/mcsmanager/daemon || exit
+    cd /mcsmanager/daemon
     npm install
 
     log "Installing dependencies for web..."
-    cd /opt/mcsmanager/web || exit
+    cd /mcsmanager/web
     npm install
 
     log "McsManager installation completed. Follow the instructions below:"
     echo -e "\n#######################################"
     echo "# To start McsManager:                #"
     echo "# 1. Open Terminal 1 and run:         #"
-    echo "#    cd /opt/mcsmanager               #"
+    echo "#    cd /mcsmanager               #"
     echo "#    ./start-daemon.sh                #"
     echo "#                                     #"
     echo "# 2. Open Terminal 2 and run:         #"
-    echo "#    cd /opt/mcsmanager               #"
+    echo "#    cd /mcsmanager               #"
     echo "#    ./start-web.sh                   #"
     echo "#                                     #"
-    echo "# Then access the panel in your browser."
+    echo "# Then access the panel in your browser. It will be on localhost:23333 and the daemon will be localhost:24444"
     echo "#######################################"
 }
 
-# Section 3: McsManager Manual Installation
-install_mcsmanager_manual() {
-    log "Manual installation for McsManager..."
-    echo "#############################################"
-    echo "# Follow these steps for manual installation:"
-    echo "# 1. Download the latest McsManager package:"
-    echo "#    wget https://github.com/MCSManager/MCSManager/releases/latest/download/mcsmanager_linux_release.tar.gz"
-    echo "# 2. Extract the package:"
-    echo "#    tar -zxf mcsmanager_linux_release.tar.gz"
-    echo "# 3. Navigate to the 'daemon' directory and run:"
-    echo "#    npm install"
-    echo "# 4. Navigate to the 'web' directory and run:"
-    echo "#    npm install"
-    echo "# 5. Start the daemon and web servers:"
-    echo "#    ./start-daemon.sh & ./start-web.sh"
-    echo "#############################################"
-    log "Manual installation instructions provided."
-}
+
 
 # Section 5: Install PufferPanel without Docker
 install_pufferpanel_no_docker() {
@@ -174,31 +156,29 @@ while true; do
     echo -e "\n${YELLOW}Please select an option:${NC}"
     echo "1) Install Node.js"
     echo "2) Install McsManager"
-    echo "3) McsManager Manual Installation"
-    echo "4) Install PufferPanel with Docker"
-    echo "5) Install PufferPanel without Docker"
-    echo "6) Install Ctrl Panel"
-    echo "7) Install Jexactyl"
-    echo "8) Install Pterodactyl Official Panel"
-    echo "9) Install Pterodactyl Official Node"
-    echo "10) Install Pterodactyl Panel (Unofficial Script)"
-    echo "11) Install Pterodactyl Node (Unofficial Script)"
-    echo "12) Exit"
-    read -p "Enter your choice [1-12]: " choice
+    echo "3) Install PufferPanel with Docker"
+    echo "4) Install PufferPanel without Docker"
+    echo "5) Install Ctrl Panel"
+    echo "6) Install Jexactyl"
+    echo "7) Install Pterodactyl Official Panel"
+    echo "8) Install Pterodactyl Official Node"
+    echo "9) Install Pterodactyl Panel (Unofficial Script)"
+    echo "10) Install Pterodactyl Node (Unofficial Script)"
+    echo "11) Exit"
+    read -p "Enter your choice [1-11]: " choice
 
     case $choice in
     1) install_nodejs ;;
     2) install_mcsmanager ;;
-    3) install_mcsmanager_manual ;;
-    4) install_pufferpanel_docker ;;
-    5) install_pufferpanel_no_docker ;;
-    6) install_ctrl_panel ;;
-    7) install_jexactyl ;;
-    8) install_pterodactyl_panel_official ;;
-    9) install_pterodactyl_node_official ;;
-    10) install_pterodactyl_panel_unofficial ;;
-    11) install_pterodactyl_node_unofficial ;;
-    12) log "Exiting script. Goodbye!"; exit 0 ;;
+    3) install_pufferpanel_docker ;;
+    4) install_pufferpanel_no_docker ;;
+    5) install_ctrl_panel ;;
+    6) install_jexactyl ;;
+    7) install_pterodactyl_panel_official ;;
+    8) install_pterodactyl_node_official ;;
+    9) install_pterodactyl_panel_unofficial ;;
+    10) install_pterodactyl_node_unofficial ;;
+    11) log "Exiting script. Goodbye!"; exit 0 ;;
     *) error "Invalid choice. Please try again." ;;
     esac
 done
